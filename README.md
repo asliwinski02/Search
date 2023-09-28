@@ -5,16 +5,20 @@ def bfs(graph, root):
     queue.append(root)
 
     while queue:
-        vertex = queue.pop(0)
-        print(str(vertex) + " ", end="")
+       vertex = queue.pop(0)
+       print(str(vertex) + " ", end="")
 
-        for neighbour in graph[vertex]:
-            if neighbour not in visited:
-                visited.add(neighbour)
-                queue.append(neighbour)
+       for next in graph[vertex]:
+         if next not in visited:
+             visited.add(next)
+             queue.append(next)
 
-
-
-graph = {'1': ['2', '3'], '2': ['4', '5'], '3': ['6', '7'], '4': ['8', '9'], '5': ['10', '11']}
+graph = {
+    '1': ['2', '3'],
+    '2': ['4', '5'],
+    '3': ['6', '7'],
+    '4': ['8', '9'],
+    '5': ['10', '11']
+}
 print("Following is Breadth First Traversal: ")
 bfs(graph, '1')
