@@ -1,0 +1,43 @@
+import heapq
+
+heuristic_numbers = {'S': 10,
+                     'A': 8,
+                     'B': 9,
+                     'C': 7,
+                     'D': 4,
+                     'E': 3,
+                     'F': 0,
+                     'G': 6,
+                     'H': 6}
+
+chart = {'S': [('A', 3), ('B', 2)], 'A': [('C', 3), ('G', 2)], 'B': [('A', 4), ('D', 6)], 'C': [('H', 3), ('B', 4)],
+         'D': [('E', 2), ('F', 3)], 'E': [('F', 5)], 'H': [('A', 4), ('D', 4)], 'G': [('D', 4), ('E', 5)], 'F': []
+         }
+
+
+def a_star(start, goal):
+    c_values = {node: float('inf') for node in chart}
+    c_values[start] = 0
+    open_set = [(0 + heuristic_numbers[start], start)]
+
+    while open_set:
+        current_node = heapq.heappop(open_set)
+
+        if current_node == goal:
+            return c_values[goal]
+
+        for neighbor, cost in chart[current_node]:
+            tentative_c_value = c_values[current_node] + cost
+            if tentative_c_value < c_values[neighbor]:
+                c_values[neighbor] = tentative_c_value
+                s_value = tentative_c_value + heuristic_numbers[neighbor]
+                heapq.heappush(open_set, (s_value, neighbor))
+
+    return float('inf')
+
+
+start = 'S'
+goal = 'F'
+
+path = a_star(start, goal)
+print(path)
