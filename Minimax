@@ -1,0 +1,21 @@
+import math
+
+
+def minimax(curDepth, nodeIndex, maxTurn, nodes, goalDepth):
+    if curDepth == goalDepth:
+        return nodes[nodeIndex]
+
+    if maxTurn:
+        return max(minimax(curDepth + 1, nodeIndex * 2, False, nodes, goalDepth),
+                   minimax(curDepth + 1, nodeIndex * 2 + 1, False, nodes, goalDepth))
+
+    else:
+        return min(minimax(curDepth + 1, nodeIndex * 2, True, nodes, goalDepth),
+                   minimax(curDepth + 1, nodeIndex * 2 + 1, True, nodes, goalDepth))
+
+
+nodes = [3, 5, 17, 8, -2, 5, -1, 7]
+
+treeDepth = math.log(len(nodes), 2)
+optimalValue = minimax(0, 0, True, nodes, treeDepth)
+print(f"The optimal value is {optimalValue}")
