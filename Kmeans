@@ -1,0 +1,50 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+card = pd.read_csv('/Users/allie/Documents/Credit Card Customer Data.csv')
+print(card.head(700))
+
+X = card[['Total_Credit_Cards', 'Avg_Credit_Limit', 'Sl_No', 'Customer Key']]
+
+
+sse = []
+for k in range(1, 11):
+    km = KMeans(n_clusters=k, random_state=2)
+    km.fit(X)
+    sse.append(km.inertia_)
+
+sns.set_style("whitegrid")
+g = sns.lineplot(x=range(1, 11), y=sse)
+
+g.set(xlabel="Number of cluster (k)", ylabel="Sum Squared Error", title='Elbow Method')
+
+plt.show()
+
+kmeans = KMeans(n_clusters=3, random_state=2)
+kmeans.fit(X)
+kmeans.cluster_centers_
+
+predictions = kmeans.fit_predict(X)
+
+plt.figure(figsize=(12, 7))
+plt.subplot(1, 2, 1)
+plt.scatter(X['Total_Credit_Cards'], X['Avg_Credit_Limit'], c=predictions)
+plt.grid(True)
+for center in kmeans.cluster_centers_:
+    center = center[:2]
+    plt.scatter(center[0], center[1], marker='^', c='red')
+plt.xlabel("Total Credit Cards")
+plt.ylabel("Average Credit Limit")
+
+
+plt.subplot(1, 2, 2)
+plt.scatter(X['Sl_No'], X['Customer Key'], c=predictions)
+plt.grid(True)
+for center in kmeans.cluster_centers_:
+    center = center[2:4]
+    plt.scatter(center[0], center[1], marker='^', c='red')
+plt.xlabel("Serial Number")
+plt.ylabel("Customer Key")
+plt.show()
